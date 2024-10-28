@@ -49,7 +49,7 @@ CLOUDINARY_SECRET_KEY=<your_cloudinary_secret_key>
 
 ```bash
 git clone https://github.com/JigarHingu/ecommerce_app_backend.git
-cd kings-collection
+cd ecommerce_app_backend
 ```
 
 2. Install Dependencies:
