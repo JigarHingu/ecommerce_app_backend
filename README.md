@@ -1,169 +1,203 @@
-# King's Collection
+# King's Collection - E-commerce Web Application
+
+King's Collection is a clothing e-commerce platform built with React, providing a full-featured shopping experience with integrated payment processing, cart and order management, and backend connectivity.
 
 ## 1. Project Overview
 
-### 1.1 Introduction
-- King's Collection is an e-commerce platform for purchasing clothing and accessories, providing a seamless shopping experience.
-- Features include product listings, cart management, multiple payment gateways, and an admin panel for managing orders and inventory.
+### 1.1 Purpose
+King's Collection aims to provide a seamless shopping experience for customers, enabling users to browse, add items to their cart, and securely complete purchases. The application includes user authentication, cart persistence, and an admin panel for managing orders.
 
-### 1.2 Technologies Used
-- **Frontend**: React, Tailwind CSS, React Router
-- **Backend**: Node.js, Express, MongoDB, Mongoose
-- **APIs and Libraries**: Stripe, Razorpay, Cloudinary, Multer
-- **Additional**: React Context API, Axios, dotenv
+### 1.2 Key Features
+- **Product Browsing:** View products with images, ratings, and size options.
+- **Cart Management:** Add, update, and remove items from the cart.
+- **User Authentication:** Google login for easy access and cart data storage.
+- **Payment Integration:** Supports payments via Stripe and Razorpay, along with a COD option.
+- **Order Management:** View and manage orders, with order history available to users.
+- **Admin Panel:** Full access to order details, including status updates.
+- **Responsive Design:** Optimized for both desktop and mobile viewing.
 
----
+### 1.3 Technology Stack
+- **Frontend:** React, Tailwind CSS, React Router
+- **Backend:** Node.js, Express
+- **Database:** MongoDB
+- **Image Storage:** Cloudinary
+- **Payment Gateways:** Stripe, Razorpay
 
-## 2. Getting Started
+## 2. Setup and Installation
 
 ### 2.1 Prerequisites
-- **Node.js** (v14 or higher)
-- **MongoDB** instance or **MongoDB Atlas** account
-- **Cloudinary** account for image hosting
-- **Stripe** and **Razorpay** accounts for payment processing
+- **Node.js** (v14 or later)
+- **MongoDB** (URI for remote or local database)
+- **Stripe & Razorpay** (API keys for payment processing)
+- **Cloudinary** (API credentials for image storage)
 
 ### 2.2 Environment Variables
-- Create a `.env` file in both the backend and frontend directories.
-- Add the following variables:
+
+Create a `.env` file in the root directory and add the following variables:
+
+MONGODB_URI=<your_mongoDB_URI>
+STRIPE_SECRET_KEY=<your_stripe_secret_key>
+RAZORPAY_KEY_ID=<your_razorpay_key_id>
+RAZORPAY_KEY_SECRET=<your_razorpay_key_secret>
+CLOUDINARY_NAME=<your_cloudinary_name>
+CLOUDINARY_API_KEY=<your_cloudinary_api_key>
+CLOUDINARY_SECRET_KEY=<your_cloudinary_secret_key>
+
+### 2.3 Installation Steps
+
+1. Clone the Repository:
 
 ```bash
-# MongoDB
-MONGODB_URI=<Your MongoDB URI>
-
-# Cloudinary
-CLOUDINARY_NAME=<Your Cloudinary Name>
-CLOUDINARY_API_KEY=<Your Cloudinary API Key>
-CLOUDINARY_SECRET_KEY=<Your Cloudinary Secret Key>
-
-# Stripe
-STRIPE_SECRET_KEY=<Your Stripe Secret Key>
-
-# Razorpay
-RAZORPAY_KEY_ID=<Your Razorpay Key ID>
-RAZORPAY_KEY_SECRET=<Your Razorpay Key Secret>
-2.3 Installation Steps
-Clone the Repository:
-
-bash
-Copy code
-git clone https://github.com/your-username/kings-collection.git
+git clone https://github.com/JigarHingu/ecommerce_app_backend.git
 cd kings-collection
-Install Dependencies:
+```
 
-Backend:
-bash
-Copy code
+2. Install Dependencies:
+
+- Backend:
+```bash
 cd backend
 npm install
-Frontend:
-bash
-Copy code
+```
+
+- Frontend: 
+```bash
+cd frontend/
+npm install
+```
+
+3. Start the Application:
+
+- Run Backend:
+```bash
+cd backend/
+npm run start
+```
+
+- Run Frontend:
+```bash
 cd ../frontend
-npm install
-Set Up Environment Variables:
+npm run dev
+```
 
-Add variables from Section 2.2 into .env files in backend and frontend.
-Start the Application:
+4. Access the Application: Visit http://localhost:3000 to view the frontend and http://localhost:5000 for backend API endpoints.
 
-Backend Server:
-bash
-Copy code
-cd backend
-npm start
-Frontend Development Server:
-bash
-Copy code
-cd frontend
-npm start
-Access the Application:
+## Code Structure and Key Functionalities
 
-Frontend: http://localhost:3000
-Backend: http://localhost:5000
-3. Code Structure and Key Functionalities
-3.1 Overview of Key Modules and Functionalities
-3.1.1 Order Management (orderController.js)
-Placing Orders: Supports Cash on Delivery, Stripe, and Razorpay options.
-Payment Verification: Verifies payments and updates order status.
-Admin Order Management: Admins can view and update order statuses.
-User Order History: Users can access order history on their profile page.
-3.1.2 Payment Gateways Integration
-Stripe: For a secure, integrated checkout.
-Razorpay: For localized payment options.
-Cash on Delivery: Allows orders without immediate payment.
-3.1.3 Cart Management (cartController.js)
-Add to Cart: Adds items to the cart with support for size selection.
-Update Cart: Allows quantity adjustments and size updates.
-Retrieve Cart: Loads cart data from MongoDB across sessions.
-3.1.4 Database and Image Storage
-MongoDB Connection (db.js): Connects to MongoDB.
-Cloudinary (cloudinary.js): Manages image storage and retrieval.
-3.2 API Endpoints
-Order-Related Endpoints:
-bash
-Copy code
-POST /api/order/cod             # Cash on Delivery order
-POST /api/order/stripe          # Stripe payment order
-POST /api/order/razorpay        # Razorpay payment order
-POST /api/order/verifyStripe    # Stripe payment verification
-POST /api/order/verifyRazorpay  # Razorpay payment verification
-GET /api/order/allOrders        # Fetch all admin orders
-POST /api/order/userOrders      # Retrieve user's order history
-Cart-Related Endpoints:
-bash
-Copy code
-POST /api/cart/addToCart        # Add item to cart
-POST /api/cart/updateCart       # Update cart item quantity/size
-GET /api/cart/getUserCart       # Fetch current cart
-3.3 Environment Variables
-bash
-Copy code
-# MongoDB URI
+This section outlines the primary backend functionalities for "King's Collection," including order processing, payment integration, cart management, and database connectivity.
+
+### 3.1 Overview of Key Modules and Functionality
+
+Each module is designed to manage core e-commerce operations, enabling secure payment processing, efficient order handling, and responsive cart management.
+
+####  Order Management (orderController.js)
+
+- Payment Methods:
+
+- Cash on Delivery (COD): Places an order in the database with "COD" as the payment method.
+- Stripe Integration: Processes payments through Stripe by creating a session URL for secure checkout.
+- Razorpay Integration: Uses Razorpay’s API to generate orders and verify successful transactions.
+
+- Order Verification:
+
+- Stripe and Razorpay Verification: Ensures the payment was successful. If unsuccessful, the order is removed.
+
+- Admin Operations:
+
+- Fetch All Orders: Retrieves a list of all orders for admin use.
+- Update Order Status: Allows the admin to update the order status (e.g., to "shipped" or "delivered").
+
+- User-Specific Orders:
+
+Retrieve User Orders: Fetches a user’s order history for display on their account page.
+
+#### 3.1.2 Cart Management (cartController.js)
+
+- Add to Cart: Adds an item to a user's cart, handling multiple sizes.
+- Update Cart: Modifies the quantity or size of items in the cart.
+- Retrieve Cart: Fetches the current cart contents for a specific user.
+
+#### 3.1.3 Database and Cloudinary Connectivity
+
+- MongoDB Connection (db.js): Uses Mongoose to connect to MongoDB and manages connection events.
+- Cloudinary Setup (cloudinary.js): Configures Cloudinary to manage product images, using environment variables for secure access.
+
+## 3.2 API Endpoints
+
+Below are the key API endpoints for order and cart management:
+
+- Order Processing APIs:
+
+- POST /api/order/cod - Places an order using the Cash on Delivery method.
+- POST /api/order/stripe - Places an order with Stripe, initiating a payment session.
+- POST /api/order/razorpay - Places an order using Razorpay.
+- POST /api/order/verifyStripe - Verifies a Stripe payment.
+- POST /api/order/verifyRazorpay - Verifies a Razorpay payment.
+- GET /api/order/allOrders - Retrieves all orders for the admin panel.
+- POST /api/order/userOrders - Fetches orders for a specific user.
+
+- Cart Management APIs:
+
+- POST /api/cart/addToCart - Adds an item to a user's cart.
+- POST /api/cart/updateCart - Updates the quantity of an item in the cart.
+- GET /api/cart/getUserCart - Retrieves cart contents for the user.
+
+## 3.3 Environment Variables
+
+The application uses environment variables stored in a .env file for secure management of sensitive data. Key variables include:
+
+- MongoDB URI - Connection string for MongoDB.
+- Stripe API Key - For Stripe payment processing.
+- Razorpay API Key - For Razorpay payment gateway integration.
+- Cloudinary Credentials - For Cloudinary image storage and management.
+
+```bash
+# MongoDB URI for MongoDB database connection
 MONGODB_URI=<Your MongoDB URI>
 
-# Stripe Secret Key
+# Stripe Secret Key for Stripe payment processing
 STRIPE_SECRET_KEY=<Your Stripe Secret Key>
 
-# Razorpay Key ID & Secret
+# Razorpay Key ID & Key Secret for Razorpay API integration
 RAZORPAY_KEY_ID=<Your Razorpay Key ID>
 RAZORPAY_KEY_SECRET=<Your Razorpay Key Secret>
 
-# Cloudinary Credentials
+# Cloudinary Credentials (Name, API Key, Secret) for image storage and access via Cloudinary
 CLOUDINARY_NAME=<Your Cloudinary Name>
 CLOUDINARY_API_KEY=<Your Cloudinary API Key>
 CLOUDINARY_SECRET_KEY=<Your Cloudinary Secret Key>
-3.4 Key Features Summary
-Order Management: Complete order handling with updates.
-Flexible Payments: Supports various payment options.
-Persistent Cart: Maintains cart data across sessions.
-Admin Functionality: Allows order management by admins.
-Environment Security: Protects API keys with environment variables.
-4. Future Enhancements
-Planned features to improve functionality and user experience:
+```
 
-Wishlist: Allows users to save items for later.
-Reviews and Ratings: Adds product reviews by authenticated users.
-Enhanced Admin Panel: Provides additional analytics and filtering.
-User Profiles: Enables profile management and order history.
-Notifications: Adds email or SMS updates for order tracking.
-5. Contribution Guidelines
-5.1 How to Contribute
-Fork the Repository on GitHub.
-Clone your forked repository.
-bash
-Copy code
-git clone https://github.com/your-username/kings-collection.git
-cd kings-collection
-Create a Branch for your feature:
-bash
-Copy code
+## 3.4 Key Features Summary
+
+- Order Management: Flexible options for order placement, verification, and status updates.
+- Payment Gateways: Supports multiple payment methods (COD, Stripe, Razorpay).
+- Cart Management: Efficient cart operations with size and quantity updates.
+- Secure Configuration: Sensitive data stored in .env for enhanced security.
+
+## 4. Future Enhancements
+
+Several features are planned to enhance user experience and backend functionality:
+
+- Wishlist Feature: Allow users to save items for future purchases.
+- Reviews and Ratings: Enable product reviews and ratings by authenticated users.
+- Enhanced Admin Panel: Include more analytics and order filtering options for better management.
+- User Profiles: Allow users to manage their profile data, including order history and account information.
+- Improved Notifications: Implement email or SMS notifications for order updates and promotional offers.
+
+## 5. Contribution Guidelines
+
+### 5.1 How to Contribute
+We welcome contributions to improve King's Collection. If you'd like to contribute, please follow these steps:
+
+1. Fork the Repository on GitHub.
+2. Create a New Branch for your feature:
+```bash
 git checkout -b feature/YourFeature
-Commit Changes:
-bash
-Copy code
-git add .
-git commit -m "Description of your changes"
-Push to Your Forked Repository:
-bash
-Copy code
+```
+3. Make Your Changes and commit them.
+4. Push to Your Forked Repository:
+```bash
 git push origin feature/YourFeature
-Open a Pull Request with a detailed description of your changes.
+```
+5. Open a Pull Request with a detailed description of your changes.
